@@ -1,10 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<<?xml version="1.0" encoding="ISO-8859-1"?>
 <aiml version="2.0">
-    <category>
-        <pattern>ดีจ้า</pattern>
-        <template>สวัสดี</template>
-    </category>
-
     <category>
         <pattern>HELLO</pattern>
         <template>Hello!</template>
@@ -12,11 +7,11 @@
 
     <category>
         <pattern>WHO ARE YOU</pattern>
-        <template>I am KPSBot</template>
+        <template>I am HelloBot</template>
     </category>
     
     <category>
-        <pattern>I LIKE *</pattern>
-        <template>I like <star/> too.</template>
+      <pattern>I LIKE *</pattern>
+      <template>I like <star/> too.</template>
     </category>
 </aiml>
