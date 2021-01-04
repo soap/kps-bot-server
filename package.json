@@ -1,0 +1,19 @@
+{
+  "name": "kps-bot-server",
+  "version": "1.0.0",
+  "description": "KPS Line Bot Server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Line",
+    "LNS",
+    "LineBot"
+  ],
+  "author": "Prasit Gebsaap",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
