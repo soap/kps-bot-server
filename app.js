@@ -5,18 +5,20 @@ const bodyParser = require('body-parser')
 const middleware = require('@line/bot-sdk').middleware
 const JSONParseError = require('@line/bot-sdk').JSONParseError
 const SignatureValidationFailed = require('@line/bot-sdk').SignatureValidationFailed
-const AIMLInterpreter = require('aimlinterpreter')
+//const AIMLInterpreter = require('aimlinterpreter')
 //const AIMLParser = require('aimlparser')
+const aimlHigh = require('aiml-high')
 const { channelAccessToken, channelSecret } = require('./config');
 const lineClient = require('@line/bot-sdk').Client;
 const port = process.env.PORT || 4000;
 
-const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
+//const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
 //const aimlParser = new AIMLParser({ name:'KPSBot' })
-
+const interpreter = new aimlHigh({name:'KPSBot', age:'49'}, 'Goodbye');
 //aimlParser.load(['./alice.aiml'])
 
-aimlInterpreter.loadAIMLFilesIntoArray(['./kpsconnect.aiml'])
+//aimlInterpreter.loadAIMLFilesIntoArray(['./kpsconnect.aiml'])
+interpreter.loadFiles(['./kpsconnect.aiml']);
 
 const config = {
     channelAccessToken: channelAccessToken,
@@ -126,8 +128,9 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-    aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
+    //aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
     //aimlParser.getResult(message.text, (answer, wildCardArray, input) => {
+    interpreter.findAnswer(message.text, (answer, wildCardArray, input) => {
         console.log(answer + ' | ' + wildCardArray + ' | ' + input);
         if (answer) {
             return replyText(replyToken, answer);     
