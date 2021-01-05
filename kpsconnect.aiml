@@ -14,4 +14,9 @@
       <pattern>I LIKE *</pattern>
       <template>I like <star/> too.</template>
     </category>
+
+    <category>
+      <pattern>DO YOU KNOW PRASIT</pattern>
+      <template>Hey! that is Kru Prasit?</template>
+    </category>
 </aiml>
