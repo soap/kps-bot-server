@@ -14,7 +14,7 @@ const port = process.env.PORT || 4000;
 //const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
 const aimlParser = new AIMLParser({ name:'KPSBot' })
 
-aimlParser.load(['./currencies.aimll'])
+aimlParser.load(['./currencies.aiml'])
 
 //aimlInterpreter.loadAIMLFilesIntoArray(['./currencies.aiml'])
 
@@ -126,7 +126,6 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-    // aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, callback);
     //aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
     aimlParser.getResult(message.text, (answer, wildCardArray, input) => {
         console.log(answer + ' | ' + wildCardArray + ' | ' + input);
