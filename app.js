@@ -69,6 +69,10 @@ const replyText = (token, texts) => {
   );
 };
 
+var callback = function(answer, wildCardArray, input){
+    console.log(answer + ' | ' + wildCardArray + ' | ' + input);
+};
+
 // callback function to handle a single event
 function handleEvent(event) {
     console.log(event);
@@ -118,8 +122,10 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
+    // aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, callback);
     aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
-        return replyText(replyToken, answer);
+        console.log(answer + ' | ' + wildCardArray + ' | ' + input);
+        return replyText(replyToken, 'AIML processing');
     })
 }
 
