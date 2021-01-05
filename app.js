@@ -2,7 +2,12 @@
 
 const line = require('@line/bot-sdk');
 const express = require('express');
-const { channelAccessToken, channelSecret, port } = require(‘./config’);
+const { channelAccessToken, channelSecret, port } = require('./config');
+
+const config = {
+    channelAccessToken: channelAccessToken,
+    channelSecret: channelSecret
+}
 
 // create LINE SDK client
 const client = new line.Client(config);
@@ -112,7 +117,6 @@ function handleSticker(message, replyToken) {
   return replyText(replyToken, 'Got Sticker');
 }
 
-const port = config.port | 4000;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
