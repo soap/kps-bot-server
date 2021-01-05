@@ -104,7 +104,7 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(message, (answer, wildCardArray, input) => {
          return replyText(replyToken, answer);
     })
 }
