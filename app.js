@@ -12,7 +12,7 @@ const port = process.env.PORT || 4000;
 
 const aimlInterpreter = new AIMLInterpreter({ name:'KPSBot'})
 
-aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
+aimlInterpreter.loadAIMLFilesIntoArray(['./currencies.aiml'])
 
 const config = {
     channelAccessToken: channelAccessToken,
