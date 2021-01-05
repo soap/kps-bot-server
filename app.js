@@ -23,8 +23,8 @@ const client = new lineClient(config);
 const app = express();
 app.use(middleware(config));
 
-//app.use(bodyParser.urlencoded({ extended: false }))
-//app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // webhook callback
 app.post('/webhook', (req, res) => {
@@ -119,8 +119,7 @@ function handleEvent(event) {
 
 function handleText(message, replyToken) {
     aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
-        console.log("AIML answer:", answer);
-        return replyText(replyToken, 'AIML processing');
+        return replyText(replyToken, answer);
     })
 }
 
