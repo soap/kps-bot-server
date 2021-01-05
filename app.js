@@ -1,8 +1,10 @@
 'use strict';
 
-const line = require('@line/bot-sdk');
 const express = require('express');
 const bodyParser = require('body-parser')
+const middleware = require('@line/bot-sdk').middleware
+const JSONParseError = require('@line/bot-sdk').JSONParseError
+const SignatureValidationFailed = require('@line/bot-sdk').SignatureValidationFailed
 const AIMLInterpreter = require('aimlinterpreter')
 const { channelAccessToken, channelSecret } = require('./config');
 const port = process.env.PORT || 4000;
@@ -16,15 +18,16 @@ const config = {
     channelSecret: channelSecret
 }
 
-// create LINE SDK client
-const client = new line.Client(config);
+
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(middleware(config));
+
+//app.use(bodyParser.urlencoded({ extended: false }))
+//app.use(bodyParser.json())
 
 // webhook callback
-app.post('/webhook', line.middleware(config), (req, res) => {
+app.post('/webhook', (req, res) => {
   // req.body.events should be an array of events
   if (!Array.isArray(req.body.events)) {
     return res.status(500).end();
@@ -45,6 +48,17 @@ app.post('/webhook', line.middleware(config), (req, res) => {
       res.status(500).end();
     });
 });
+
+app.use((err, req, res, next) => {
+  if (err instanceof SignatureValidationFailed) {
+    res.status(401).send(err.signature)
+    return
+  } else if (err instanceof JSONParseError) {
+    res.status(400).send(err.raw)
+    return
+  }
+  next(err) // will throw default 500
+})
 
 // simple reply function
 const replyText = (token, texts) => {
