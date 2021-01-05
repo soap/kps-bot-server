@@ -2,11 +2,14 @@
 
 const line = require('@line/bot-sdk');
 const express = require('express');
+const bodyParser = require('body-parser')
+const AIMLInterpreter = require('aimlinterpreter')
 const { channelAccessToken, channelSecret } = require('./config');
 const port = process.env.PORT || 4000;
 
-console.log('Channel ID: ', channelAccessToken);
-console.log('Channel Secret: ', channelSecret);
+const aimlInterpreter = new AIMLInterpreter({ name:'KPSBot'})
+
+aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
 
 const config = {
     channelAccessToken: channelAccessToken,
@@ -17,6 +20,8 @@ const config = {
 const client = new line.Client(config);
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // webhook callback
 app.post('/webhook', line.middleware(config), (req, res) => {
@@ -99,7 +104,9 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-    return replyText(replyToken, message.text);
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
+         return replyText(replyToken, answer);
+    })
 }
 
 function handleImage(message, replyToken) {
