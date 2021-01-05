@@ -16,7 +16,7 @@ const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
 
 //aimlParser.load(['./alice.aiml'])
 
-aimlInterpreter.loadAIMLFilesIntoArray(['./alice.aiml'])
+aimlInterpreter.loadAIMLFilesIntoArray(['./kpsconnect.aiml'])
 
 const config = {
     channelAccessToken: channelAccessToken,
