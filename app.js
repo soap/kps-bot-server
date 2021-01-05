@@ -11,12 +11,12 @@ const { channelAccessToken, channelSecret } = require('./config');
 const lineClient = require('@line/bot-sdk').Client;
 const port = process.env.PORT || 4000;
 
-//const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
-const aimlParser = new AIMLParser({ name:'KPSBot' })
+const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
+//const aimlParser = new AIMLParser({ name:'KPSBot' })
 
-aimlParser.load(['./alice.aiml'])
+//aimlParser.load(['./alice.aiml'])
 
-//aimlInterpreter.loadAIMLFilesIntoArray(['./currencies.aiml'])
+aimlInterpreter.loadAIMLFilesIntoArray(['./alice.aiml'])
 
 const config = {
     channelAccessToken: channelAccessToken,
@@ -126,8 +126,8 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-    //aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
-    aimlParser.getResult(message.text, (answer, wildCardArray, input) => {
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
+    //aimlParser.getResult(message.text, (answer, wildCardArray, input) => {
         console.log(answer + ' | ' + wildCardArray + ' | ' + input);
         if (answer) {
             return replyText(replyToken, answer);     
