@@ -6,6 +6,7 @@ const { channelAccessToken, channelSecret } = require('./config');
 const port = process.env.PORT || 4000;
 
 console.log('Channel ID: ', channelAccessToken);
+console.log('Channel Secret: ', channelSecret);
 
 const config = {
     channelAccessToken: channelAccessToken,
