@@ -4,6 +4,8 @@ const line = require('@line/bot-sdk');
 const express = require('express');
 const { channelAccessToken, channelSecret, port } = require('./config');
 
+console.log('Channel ID: ', channelAccessToken);
+
 const config = {
     channelAccessToken: channelAccessToken,
     channelSecret: channelSecret
