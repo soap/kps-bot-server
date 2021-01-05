@@ -1,13 +1,15 @@
+// Reply using AIML
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
-const AIMLParser = require('aimlparser')
+const AIMLInterpreter = require('aimlinterpreter')
 
 const app = express()
 const port = process.env.PORT || 4000
-const aimlParser = new AIMLParser({ name:'KPSBot' })
+const aimlInterpreter = new AIMLInterpreter({ name:'HelloBot'})
 
-aimlParser.load(['./test-aiml.xml'])
+aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -15,7 +17,18 @@ app.use(bodyParser.json())
 app.post('/webhook', (req, res) => {
     let reply_token = req.body.events[0].replyToken
     let msg = req.body.events[0].message.text
-    aimlParser.getResult(msg, (answer, wildCardArray, input) => {
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
+        reply(reply_token, answer)
+    })
+    res.sendStatus(200)
+})
+
+app.listen(port)
+
+app.post('/webhook', (req, res) => {
+    let reply_token = req.body.events[0].replyToken
+    let msg = req.body.events[0].message.text
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
         reply(reply_token, answer)
     })
     res.sendStatus(200)
