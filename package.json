@@ -13,8 +13,13 @@
     "LineBot"
   ],
   "author": "Prasit Gebsaap",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/soap/kps-bot-server.git"
+  },
   "license": "MIT",
   "dependencies": {
+    "@line/bot-sdk": "^7.2.0",
     "aimlinterpreter": "^0.1.7",
     "aimlparser": "^1.0.5",
     "body-parser": "^1.19.0",

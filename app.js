@@ -1,58 +1,118 @@
-// Reply using AIML
+'use strict';
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-const AIMLInterpreter = require('aimlinterpreter')
+const line = require('@line/bot-sdk');
+const express = require('express');
+const config = require('./config.json');
 
-const app = express()
-const port = process.env.PORT || 4000
-const aimlInterpreter = new AIMLInterpreter({ name:'HelloBot'})
+// create LINE SDK client
+const client = new line.Client(config);
 
-aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
+const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
-app.post('/webhook', (req, res) => {
-    let reply_token = req.body.events[0].replyToken
-    let msg = req.body.events[0].message.text
-    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
-        reply(reply_token, answer)
-    })
-    res.sendStatus(200)
-})
-
-app.listen(port)
-
-app.post('/webhook', (req, res) => {
-    let reply_token = req.body.events[0].replyToken
-    let msg = req.body.events[0].message.text
-    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
-        reply(reply_token, answer)
-    })
-    res.sendStatus(200)
-})
-
-function reply(reply_token, msg) {
-    let headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer {+QxipMpLXr8Cp3BlsKxhUnreP6G5gh7VFTLDhAhEfuSlKZJUh0zh4W9YYNSs/kECJ6s9lGqepdKWX1IlTzmStX78bOy0Jf4a7aUmS2al2dtcu6qrKL2boOWRAP1+v4TOdN2mmH+v89ElYeacnAwSzwdB04t89/1O/w1cDnyilFU=}'
+// webhook callback
+app.post('/webhook', line.middleware(config), (req, res) => {
+  // req.body.events should be an array of events
+  if (!Array.isArray(req.body.events)) {
+    return res.status(500).end();
+  }
+  // handle events separately
+  Promise.all(req.body.events.map(event => {
+    console.log('event', event);
+    // check verify webhook event
+    if (event.replyToken === '00000000000000000000000000000000' ||
+      event.replyToken === 'ffffffffffffffffffffffffffffffff') {
+      return;
     }
-
-    let body = JSON.stringify({
-        replyToken: reply_token,
-        messages: [{
-            type: 'text',
-            text: msg
-        }]
-    })
-
-    request.post({
-        url: 'https://api.line.me/v2/bot/message/reply',
-        headers: headers,
-        body: body
-    }, (err, res, body) => {
-        console.log('status = ' + res.statusCode);
+    return handleEvent(event);
+  }))
+    .then(() => res.end())
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
     });
+});
+
+// simple reply function
+const replyText = (token, texts) => {
+  texts = Array.isArray(texts) ? texts : [texts];
+  return client.replyMessage(
+    token,
+    texts.map((text) => ({ type: 'text', text }))
+  );
+};
+
+// callback function to handle a single event
+function handleEvent(event) {
+  switch (event.type) {
+    case 'message':
+      const message = event.message;
+      switch (message.type) {
+        case 'text':
+          return handleText(message, event.replyToken);
+        case 'image':
+          return handleImage(message, event.replyToken);
+        case 'video':
+          return handleVideo(message, event.replyToken);
+        case 'audio':
+          return handleAudio(message, event.replyToken);
+        case 'location':
+          return handleLocation(message, event.replyToken);
+        case 'sticker':
+          return handleSticker(message, event.replyToken);
+        default:
+          throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+      }
+
+    case 'follow':
+      return replyText(event.replyToken, 'Got followed event');
+
+    case 'unfollow':
+      return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+
+    case 'join':
+      return replyText(event.replyToken, `Joined ${event.source.type}`);
+
+    case 'leave':
+      return console.log(`Left: ${JSON.stringify(event)}`);
+
+    case 'postback':
+      let data = event.postback.data;
+      return replyText(event.replyToken, `Got postback: ${data}`);
+
+    case 'beacon':
+      const dm = `${Buffer.from(event.beacon.dm || '', 'hex').toString('utf8')}`;
+      return replyText(event.replyToken, `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`);
+
+    default:
+      throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+  }
 }
+
+function handleText(message, replyToken) {
+  return replyText(replyToken, message.text);
+}
+
+function handleImage(message, replyToken) {
+  return replyText(replyToken, 'Got Image');
+}
+
+function handleVideo(message, replyToken) {
+  return replyText(replyToken, 'Got Video');
+}
+
+function handleAudio(message, replyToken) {
+  return replyText(replyToken, 'Got Audio');
+}
+
+function handleLocation(message, replyToken) {
+  return replyText(replyToken, 'Got Location');
+}
+
+function handleSticker(message, replyToken) {
+  return replyText(replyToken, 'Got Sticker');
+}
+
+const port = config.port | 4000;
+app.listen(port, () => {
+  console.log(`listening on ${port}`);
+});
