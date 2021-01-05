@@ -7,17 +7,18 @@ const JSONParseError = require('@line/bot-sdk').JSONParseError
 const SignatureValidationFailed = require('@line/bot-sdk').SignatureValidationFailed
 const AIMLInterpreter = require('aimlinterpreter')
 const { channelAccessToken, channelSecret } = require('./config');
+const lineClient = require('@line/bot-sdk').Client;
 const port = process.env.PORT || 4000;
 
 const aimlInterpreter = new AIMLInterpreter({ name:'KPSBot'})
-
+const client = new lineClient(config);
 aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
+
 
 const config = {
     channelAccessToken: channelAccessToken,
     channelSecret: channelSecret
 }
-
 
 
 const app = express();
