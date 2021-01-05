@@ -125,7 +125,10 @@ function handleText(message, replyToken) {
     // aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, callback);
     aimlInterpreter.findAnswerInLoadedAIMLFiles(message.text, (answer, wildCardArray, input) => {
         console.log(answer + ' | ' + wildCardArray + ' | ' + input);
-        return replyText(replyToken, 'AIML processing');
+        if (answer) {
+            return replyText(replyToken, answer);     
+        }
+        return replyText(replyToken, 'No answer found');
     })
 }
 
