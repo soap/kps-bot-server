@@ -18,7 +18,7 @@ const interpreter = new aimlHigh({name:'KPSBot', age:'49'}, 'Goodbye');
 //aimlParser.load(['./alice.aiml'])
 
 //aimlInterpreter.loadAIMLFilesIntoArray(['./kpsconnect.aiml'])
-interpreter.loadFiles(['./alice.aiml']);
+interpreter.loadFiles(['./kpsconnect.aiml']);
 
 const config = {
     channelAccessToken: channelAccessToken,
