@@ -14,7 +14,7 @@ const port = process.env.PORT || 4000;
 //const aimlInterpreter = new AIMLInterpreter({ name: 'KPSBot' })
 const aimlParser = new AIMLParser({ name:'KPSBot' })
 
-aimlParser.load(['./currencies.aiml'])
+aimlParser.load(['./alice.aiml'])
 
 //aimlInterpreter.loadAIMLFilesIntoArray(['./currencies.aiml'])
 
