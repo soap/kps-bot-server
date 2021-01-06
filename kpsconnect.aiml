@@ -4,7 +4,7 @@
         <pattern>HELLO</pattern>
         <template>
             <random>
-                <il>Hello!</li>
+                <li>Hello!</li>
                 <li>How are you?</li>
                 <li>Nice to meet you</li>
             </random>
