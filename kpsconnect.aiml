@@ -32,4 +32,11 @@
       <pattern>DO YOU KNOW PRASIT</pattern>
       <template>Hey! that is Kru Prasit?</template>
     </category>
+
+    <category>
+        <pattern>WHO IS PRASIT</pattern>
+        <template>
+            <srai>DO YOU KNOW PRASIT</srai>
+        </template>
+    </category>
 </aiml>

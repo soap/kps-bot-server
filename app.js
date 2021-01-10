@@ -127,7 +127,7 @@ function handleText(message, replyToken) {
         if (answer) {
             return replyText(replyToken, answer);     
         }
-        return replyText(replyToken, 'No answer found');
+        return replyText(replyToken, 'Sorry, I have no idea about your words.');
     })
 }
 
