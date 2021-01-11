@@ -39,4 +39,9 @@
             <srai>DO YOU KNOW PRASIT</srai>
         </template>
     </category>
+
+    <category>
+      <pattern>SERVICE: GET ACCESS CODE</pattern>
+      <template>You have to configurate you Student ID first</template>
+    </category>
 </aiml>
