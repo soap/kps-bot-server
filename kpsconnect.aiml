@@ -42,6 +42,6 @@
 
     <category>
       <pattern>SERVICE: MY ACCESS CODE</pattern>
-      <template>You have to configurate you Student ID first</template>
+      <template>You have to configurate your Student ID first</template>
     </category>
 </aiml>
